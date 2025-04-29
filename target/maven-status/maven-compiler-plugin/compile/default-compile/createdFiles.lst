@@ -3,3 +3,4 @@ com/debug/Debugger.class
 com/debug/ConsoleColors.class
 com/debug/Logger.class
 com/debug/OutputType.class
+com/debug/example.class

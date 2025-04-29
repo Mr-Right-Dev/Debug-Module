@@ -1,7 +1,7 @@
 package com.debug;
 
 public class Debugger {
-    public static void sucess(String message) {
+    public static void success(String message) {
         Logger.log(OutputType.success, message);
     }
 

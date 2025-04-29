@@ -23,17 +23,18 @@ public class Logger {
     private static DateTimeFormatter formatterLogger = DateTimeFormatter.ofPattern("MM-dd-yyyy_HH-mm-ss");
     private static DateTimeFormatter formatterLog = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss.nn");
     private static String attachedDirectory = null;
-    
+
     // Default Setter.
     static {
-        if (itemsPrioritys.isEmpty()) { 
+        if (itemsPrioritys.isEmpty()) {
             itemsPrioritys.put("log", Priorities.All);
             itemsPrioritys.put("success", Priorities.Low);
             itemsPrioritys.put("warn", Priorities.Medium);
             itemsPrioritys.put("error", Priorities.High);
             itemsPrioritys.put("critical", Priorities.Critical);
 
-            System.out.println("Debug module initialized sucessfully."+ConsoleColors.Blue.getColor()+"[ Made by Mr-Right-Dev ]"+ConsoleColors.Reset.getColor());
+            System.out.println("Debug module initialized sucessfully." + ConsoleColors.Blue.getColor()
+                    + "[ Made by Mr-Right-Dev ]" + ConsoleColors.Reset.getColor());
         }
 
         Logger.internalShutdownHook();
@@ -53,7 +54,7 @@ public class Logger {
         }
 
         String time = Logger.formatterLogger.format(LocalDateTime.now()).toString();
-        File savingFile = new File(Logger.attachedDirectory+"/logFile"+time+".json");
+        File savingFile = new File(Logger.attachedDirectory + "/logFile" + time + ".json");
         JSONObject fileSave = new JSONObject();
         fileSave.put("timestamp", Logger.formatterLog.format(LocalDateTime.now()).toString());
         fileSave.put("logs", Logger.logs);
@@ -68,9 +69,9 @@ public class Logger {
         }
 
         Logger.clearFiles();
-   }
+    }
 
-   private static void clearFiles() {
+    private static void clearFiles() {
         if (Logger.maxLogFiles <= 0) {
             return;
         }
@@ -91,7 +92,7 @@ public class Logger {
                 String line;
                 String rawJson = "";
                 while ((line = reader.readLine()) != null) {
-                    rawJson = rawJson+line;
+                    rawJson = rawJson + line;
                 }
 
                 JSONObject obj = new JSONObject(rawJson);
@@ -105,7 +106,7 @@ public class Logger {
                     oldestFile = log;
                 }
             } catch (IOException e) {
-                System.out.println("Error while reading log file. Path: "+log.toPath().toString());
+                System.out.println("Error while reading log file. Path: " + log.toPath().toString());
                 e.printStackTrace();
             }
         }
@@ -117,7 +118,7 @@ public class Logger {
         if (!oldestFile.delete()) {
             System.out.println("Fail to delete oldest file.");
         }
-   }
+    }
 
     private static String getStackTraceAsString(Throwable throwable) {
         StringBuilder sb = new StringBuilder();
@@ -127,7 +128,7 @@ public class Logger {
         }
         return sb.toString();
     }
-    
+
     private static void print(OutputType outputType, String message) {
         int currentLevel = ((Priorities) itemsPrioritys.get(outputType.name().toLowerCase())).getLevel();
 
@@ -135,8 +136,9 @@ public class Logger {
 
         if (Logger.logs.length() == 0 && Logger.attachedDirectory == null && Logger.notify == false) {
             Logger.notify = true;
-            Logger.print(OutputType.warn, "No saving dirctory attached, all saved logs will be dumped after execution exit.");
-        } 
+            Logger.print(OutputType.warn,
+                    "No saving dirctory attached, all saved logs will be dumped after execution exit.");
+        }
 
         JSONObject logItem = new JSONObject();
         logItem.put("message", message);
@@ -154,14 +156,17 @@ public class Logger {
             return;
         }
 
-        String prefix = "["+time+"] "+outputType.getColor().getColor()+outputType.name().toUpperCase()+ConsoleColors.Reset.getColor()+": ";
-        System.out.println(prefix+message);
+        String prefix = "[" + time + "] " + outputType.getColor().getColor() + outputType.name().toUpperCase()
+                + ConsoleColors.Reset.getColor() + ": ";
+        System.out.println(prefix + message);
     }
 
     /**
-     * DEFAULT: maxLogLines: 500, maxLogFiles: 0 
+     * DEFAULT: maxLogLines: 500, maxLogFiles: 0
+     * 
      * @param maxLogLines totals logs per file.
-     * @param maxLogFiles How much files need to start deleting the oldest. (0 = never)
+     * @param maxLogFiles How much files need to start deleting the oldest. (0 =
+     *                    never)
      */
     public static void newLogSettings(int maxLogLines, int maxLogFiles) {
         Logger.maxLogFiles = maxLogFiles;
@@ -170,6 +175,7 @@ public class Logger {
 
     /**
      * Update the priority of the selected OutputType.
+     * 
      * @param outputType
      * @param priority
      */
@@ -179,6 +185,7 @@ public class Logger {
 
     /**
      * Attach an file path to save the logs.
+     * 
      * @param path
      */
     public static void attachSavingFolder(String path) {
@@ -187,6 +194,7 @@ public class Logger {
 
     /**
      * Set the priority that make show up logs.
+     * 
      * @param priority
      */
     public static void setLogPriority(Priorities priority) {
@@ -195,7 +203,8 @@ public class Logger {
 
     /**
      * Logs an message, comparing the required priority with the current.
-     * It saves all messages. 
+     * It saves all messages.
+     * 
      * @param outputType
      * @param message
      */
@@ -205,12 +214,15 @@ public class Logger {
 
     /**
      * Logs an message, comparing the required priority with the current.
+     * 
      * @param outputType
      * @param message
-     * @param throwable Show in the end of the message for context. (Message and Trace)
+     * @param throwable  Show in the end of the message for context. (Message and
+     *                   Trace)
      */
     public static void log(OutputType outputType, String message, Throwable throwable) {
-        Logger.print(outputType, message+" | Message: "+throwable.getMessage()+" Trace: "+Logger.getStackTraceAsString(throwable));
+        Logger.print(outputType, message + " | Message: " + throwable.getMessage() + " Trace: "
+                + Logger.getStackTraceAsString(throwable));
     }
 
     /**
