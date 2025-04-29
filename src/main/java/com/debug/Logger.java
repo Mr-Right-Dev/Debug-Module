@@ -19,6 +19,7 @@ public class Logger {
     private static int maxLogLines = 500;
     private static int maxLogFiles = 0; // 0 to never erase.
     private static boolean notify = false;
+    private static boolean internalShudownHook = true;
 
     private static DateTimeFormatter formatterLogger = DateTimeFormatter.ofPattern("MM-dd-yyyy_HH-mm-ss");
     private static DateTimeFormatter formatterLog = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss.nn");
@@ -42,6 +43,10 @@ public class Logger {
 
     private static void internalShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (!Logger.internalShudownHook) {
+                return;
+            }
+            
             System.out.println("[INTERNAL]: Shutdown hook called, saving logs.");
             Logger.saveLogs();
         }));
@@ -229,6 +234,7 @@ public class Logger {
      * Use this function to save all logs before an shutdown.
      */
     public static void shutdownHook() {
+        Logger.internalShudownHook = false;
         Thread saver = new Thread(Logger::saveLogs, "logsaver");
         saver.setDaemon(false);
     }
