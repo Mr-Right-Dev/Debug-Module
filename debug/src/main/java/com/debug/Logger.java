@@ -178,7 +178,7 @@ public class Logger {
     }
 
     /**
-     * Attach an file path to save the logs.
+     * Attach an file path to save the logs. It uses File method.
      * @param path
      */
     public static void attachSavingFolder(String path) {
