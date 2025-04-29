@@ -10,7 +10,7 @@
     <version>1.0</version>
 
     <name>Advanced Debug</name>
-    <description>A custom Java debug module. Next uptdate will be an interface (html) for better understanding.</description>
+    <description>A custom Java debug module. The next update will be an interface (HTML) for better understanding.</description>
 
     <licenses>
         <license>
@@ -32,10 +32,12 @@
     </properties>
 
     <dependencies>
+        <!-- JSON library for handling JSON parsing -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20240303</version>
         </dependency>
     </dependencies>
+
 </project>
